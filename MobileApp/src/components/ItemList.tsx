@@ -1,38 +1,42 @@
 import React from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import COLORS from '../styles/colors';
 
-// TypeScript interface dlaItem
-interface Item {
+export interface Item {
   id: string;
   name: string;
-  price: number;
+  price: string;
+  image: any;
 }
 
-const ItemList: React.FC = () => {
-  // Dane testowe
-  const items: Item[] = [
-    { id: '1', name: 'Laptop', price: 3000 },
-    { id: '2', name: 'Monitor', price: 800 },
-    { id: '3', name: 'Mysz', price: 50 },
-    { id: '4', name: 'Klawiatura', price: 150 },
-  ];
+type ItemListProps = {
+  items: Item[];
+  onSelectItem?: (item: Item) => void;
+};
 
-  // Render pojedynczego wiersza
+const ItemList: React.FC<ItemListProps> = ({ items, onSelectItem }) => {
   const renderItem = ({ item }: { item: Item }) => (
-    <View style={styles.item}>
+    <TouchableOpacity
+      style={styles.item}
+      activeOpacity={0.85}
+      onPress={() => onSelectItem?.(item)}
+    >
+      <Image source={item.image} style={styles.image} resizeMode="cover" />
+
       <View style={styles.itemContent}>
         <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.price}>{item.price} zł</Text>
+        <Text style={styles.price}>{item.price}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
     <FlatList
       data={items}
       renderItem={renderItem}
-      keyExtractor={(item) => item.id}  // Unikalny klucz
+      keyExtractor={(item) => item.id}
       style={styles.list}
+      showsVerticalScrollIndicator={false}
       ItemSeparatorComponent={() => <View style={styles.separator} />}
     />
   );
@@ -44,26 +48,33 @@ const styles = StyleSheet.create({
   },
   item: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 16,
-    backgroundColor: '#fff',
+    alignItems: 'center',
+    backgroundColor: COLORS.card,
+    borderRadius: 16,
+    padding: 14,
+  },
+  image: {
+    width: 72,
+    height: 72,
+    borderRadius: 12,
+    marginRight: 14,
   },
   itemContent: {
     flex: 1,
   },
   name: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#333',
+    fontSize: 17,
+    fontWeight: '600',
+    color: COLORS.text,
+    marginBottom: 6,
   },
   price: {
-    fontSize: 14,
-    color: '#007AFF',
-    marginTop: 4,
+    fontSize: 15,
+    color: COLORS.active,
+    fontWeight: '600',
   },
   separator: {
-    height: 1,
-    backgroundColor: '#eee',
+    height: 12,
   },
 });
 
