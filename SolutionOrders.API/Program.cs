@@ -27,7 +27,6 @@ namespace SolutionOrders.API
 
             var app = builder.Build();
 
-
             // Automatyczne zastosowanie migracji przy starcie
             using (var scope = app.Services.CreateScope())
             {

@@ -108,7 +108,6 @@ namespace SolutionOrders.API.Models.Data
 
             // Seed data - przykładowe dane
             SeedData(modelBuilder);
-                }
 
             private void SeedData(ModelBuilder modelBuilder)
         {

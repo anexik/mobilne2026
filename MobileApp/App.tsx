@@ -1,45 +1,48 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React from 'react';
+import { StatusBar } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import HomeScreen from './src/screens/HomeScreen';
+import DetailsScreen from './src/screens/DetailsScreen';
+import ProductListScreen from './src/screens/ProductListScreen';
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+type Screen = 'home' | 'details' | 'coffeeList' | 'teaList';
 
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
+function App(): React.JSX.Element {
+  const [currentScreen, setCurrentScreen] = React.useState<Screen>('home');
 
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
+      <StatusBar barStyle="dark-content" />
+
+      {currentScreen === 'home' && (
+        <HomeScreen
+          onOpenDetails={() => setCurrentScreen('details')}
+          onOpenCoffeeList={() => setCurrentScreen('coffeeList')}
+          onOpenTeaList={() => setCurrentScreen('teaList')}
+        />
+      )}
+
+      {currentScreen === 'coffeeList' && (
+        <ProductListScreen
+          title="Kawy"
+          onBack={() => setCurrentScreen('home')}
+          onOpenDetails={() => setCurrentScreen('details')}
+        />
+      )}
+
+      {currentScreen === 'teaList' && (
+        <ProductListScreen
+          title="Herbaty"
+          onBack={() => setCurrentScreen('home')}
+          onOpenDetails={() => setCurrentScreen('details')}
+        />
+      )}
+
+      {currentScreen === 'details' && (
+        <DetailsScreen onBack={() => setCurrentScreen('home')} />
+      )}
     </SafeAreaProvider>
   );
 }
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default App;
